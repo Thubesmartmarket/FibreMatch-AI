@@ -448,6 +448,7 @@ function updatePlanUI(){
   if(currentPlan.code==='free'){$('usageBar').style.display='block';$('usageFill').style.width=Math.min(100,(used/limit)*100)+'%'}else $('usageBar').style.display='none';
   $('limitLock').style.display=(currentPlan.code==='free'&&used>=limit)?'block':'none';
   $('packBtn').disabled=(currentPlan.code==='free'&&used>=limit);
+  showOutreachIfPaid();
 }
 function renderHistory(){
   const items=loadLocalHistory(),list=$('historyList');
