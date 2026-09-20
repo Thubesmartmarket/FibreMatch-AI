@@ -521,6 +521,7 @@ $('packForm').addEventListener('submit',async e=>{
   const vals={detail:$('detail').value,notes:$('notes').value};
   document.querySelectorAll('#packForm select').forEach(s=>vals[s.id]=s.value);
   const pack=buildPack(vals);$('resultBox').style.display='block';$('resultBox').innerHTML=pack.html;
+  window.__lastBriefText = $('resultBox').innerText || '';
   monthUsage+=1;saveLocalUsage();const history=loadLocalHistory();history.unshift({title:pack.title,when:pack.when,score:pack.score});saveLocalHistory(history);updatePlanUI();renderHistory();
 });
 async function tryAutoActivate(){
