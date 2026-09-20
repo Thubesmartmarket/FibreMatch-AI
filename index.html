@@ -308,6 +308,16 @@ footer{border-top:1px solid var(--border);padding:28px 0;color:var(--muted);font
           <div class="usage-bar" id="usageBar" style="display:none"><span id="usageFill"></span></div>
           <div class="locked" id="limitLock" style="display:none">Free limit reached (3 packs this month). Upgrade to Pro for unlimited packs.</div>
           <div id="resultBox" style="display:none"></div>
+          <div id="outreachBox" style="display:none;margin-top:16px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:12px">
+  <strong>Provider outreach (Pro/Elite)</strong>
+  <p style="opacity:.85;font-size:.9rem">We'll email matching providers in our network with your brief. They reply to you directly.</p>
+  <label style="display:block;margin:8px 0 4px;font-size:.75rem">City / area</label>
+  <input id="outreachCity" placeholder="e.g. Johannesburg" style="width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#111;color:#fff" />
+  <button id="outreachBtn" type="button" style="margin-top:10px;width:100%;padding:12px;border:none;border-radius:10px;font-weight:700;cursor:pointer">
+    Contact providers for me
+  </button>
+  <p id="outreachMsg" style="margin-top:8px;font-size:.85rem"></p>
+</div>
         </form>
       </div>
     </div>
