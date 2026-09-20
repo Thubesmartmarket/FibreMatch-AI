@@ -370,6 +370,58 @@ const SB_URL="https://omiynmichresemvmhtwu.supabase.co";
 const SB_KEY="sb_publishable_RmG-NaWz5A0d-yyjxgvc_Q_hKzcn2LN";
 const AGENT="fibrematch";
 const NAME="FibreMatch";
+  const OUTREACH_URL = "https://omiynmichresemvmhtwu.supabase.co/functions/v1/send-outreach";
+
+function showOutreachIfPaid() {
+  const box = document.getElementById("outreachBox");
+  if (!box) return;
+  const paid = currentPlan && (currentPlan.code === "pro" || currentPlan.code === "elite");
+  box.style.display = paid ? "block" : "none";
+}
+
+// call showOutreachIfPaid() inside your existing updatePlanUI / refreshSession
+
+document.getElementById("outreachBtn")?.addEventListener("click", async () => {
+  const msg = document.getElementById("outreachMsg");
+  const city = (document.getElementById("outreachCity")?.value || "All").trim();
+  const briefText = window.__lastBriefText || document.getElementById("briefOutput")?.innerText || "";
+  if (!briefText || briefText.length < 40) {
+    msg.textContent = "Generate your brief first.";
+    return;
+  }
+  msg.textContent = "Sending to providers…";
+  try {
+    const { data: sessionData } = await client.auth.getSession();
+    const token = sessionData.session?.access_token;
+    if (!token) {
+      msg.textContent = "Sign in with a Pro/Elite account first.";
+      return;
+    }
+    const res = await fetch(OUTREACH_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        apikey: SB_KEY,
+      },
+      body: JSON.stringify({
+        agent: AGENT, // you already have AGENT = 'fibrematch' etc.
+        city,
+        brief: briefText,
+        customerName: sessionData.session.user.email,
+        customerEmail: sessionData.session.user.email,
+      }),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || "Outreach failed");
+    msg.textContent = json.message || `Sent to ${json.sent} providers.`;
+  } catch (e) {
+    msg.textContent = e.message || "Outreach failed";
+  }
+});
+
+// When you build the brief, also set:
+// window.__lastBriefText = thePlainTextBrief;
 function getRedirectUrl(){const c=window.location.href.split('#')[0].split('?')[0];return window.location.protocol==='file:'?'http://localhost:5500/index.html':c}
 const client=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const PLANS={free:{code:'free',name:'Free',limit:3,history:3,elite:false},pro:{code:'pro',name:'Pro',limit:9999,history:9999,elite:false},elite:{code:'elite',name:'Elite',limit:9999,history:9999,elite:true}};
